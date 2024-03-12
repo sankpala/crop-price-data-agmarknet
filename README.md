@@ -1,6 +1,5 @@
-# Your Project Name
+# Daily Crop Prices from Agmarknt API
 
-Brief description or introduction of your project.
 
 ## Installation
 
@@ -27,11 +26,11 @@ To run this project, you need to follow these steps:
 
 ## Usage
 
-Explain how to use your project. Include code examples and any relevant information that users might need.
+
 
 ## Contributing
 
-Provide guidelines for those who want to contribute to your project. Include information about how to report issues, submit feature requests, and contribute code.
+
 
 ## License
 
