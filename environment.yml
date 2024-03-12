@@ -1,14 +1,14 @@
-name: web_scraping_environment
+name: web_scraping_env
 channels:
   - defaults
 dependencies:
   - python=3.6
-  - pandas
-  - beautifulsoup4
-  - chromium-chromedriver
-  - selenium
-  - requests
-  - lxml
+  - pandas=1.4.3
+  - beautifulsoup4=4.10.0
+  - selenium=3.141.0
+  - lxml=4.7.3
+  - chromium
+  - pip
   - pip:
     - bs4==0.0.1
     - webdriver_manager==3.5.1
