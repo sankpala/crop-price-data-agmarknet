@@ -34,6 +34,4 @@ To run this project, you need to follow these steps:
 
 ## License
 
-Specify the license under which your project is released. Include any terms and conditions for using or modifying your project.
-
 This project is licensed under the [MIT License](LICENSE).
