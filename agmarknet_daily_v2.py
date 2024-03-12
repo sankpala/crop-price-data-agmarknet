@@ -173,7 +173,7 @@ from datetime import datetime
 group_commodity = 'Vegetables'
 commodity = 'Onion'
 
-file_path = '/' + commodity + '.csv'
+file_path = commodity + '.csv'
 
 if os.path.exists(file_path):
     df = pd.read_csv(file_path)
