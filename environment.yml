@@ -1,12 +1,14 @@
 name: web_scraping_env
 channels:
   - defaults
+  - conda-forge
 dependencies:
   - python=3.6
-  - pandas
-  - beautifulsoup4
-  - selenium
-  - chromium-chromedriver
+  - pandas=1.4.3
+  - beautifulsoup4=4.10.0
+  - selenium=3.141.0
+  - lxml=4.6.3
+  - chromium=94.0.4606.71
   - pip
   - pip:
     - bs4==0.0.1
