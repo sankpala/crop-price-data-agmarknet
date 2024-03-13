@@ -17,6 +17,8 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import StaleElementReferenceException
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
 
 options = webdriver.ChromeOptions()
 options.add_argument('--headless')
@@ -117,6 +119,14 @@ def time_delta(result_date):
 def refresh():
   browser.get("https://agmarknet.gov.in/PriceAndArrivals/SpecificCommodityWeeklyReport.aspx")
 
+def connect_db():
+  uri = "mongodb+srv://adeshsan:Shubham1998@cluster0.ed3cqap.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+  # Create a new client and connect to the server
+  client = MongoClient(uri, server_api=ServerApi('1'))
+  client.admin.command('ping')
+  table=client.agmarknet.onion
+  return table
+
 def output_data(res):
   soup = bs4.BeautifulSoup(res, 'html.parser')
   table = soup.find('table', id='cphBody_gridRecords')
@@ -173,20 +183,15 @@ from datetime import datetime
 group_commodity = 'Vegetables'
 commodity = 'Onion'
 
-file_path = commodity + '.csv'
+table=connect_db()
+m_date = table.find_one(sort=[('Date', -1)])
 
-if os.path.exists(file_path):
-    df = pd.read_csv(file_path)
-    if not df.empty:
-        max_date = pd.to_datetime(df['Date']).max()
-        min_date = max_date
-    else:
-        min_date = datetime(2010, 1, 1)
+if m_date['Date'] is not None:
+    min_date = m_date['Date']
 else:
-    with open(file_path, "w") as file:
-        file.close()
     min_date = datetime(2010, 1, 1)
 
+# For MongoDB
 date_seq=date_sequence(min_date,datetime.today())
 refresh_f=1
 refresh_n=0
@@ -208,20 +213,11 @@ for d in date_seq:
     data=output_data(res)
     data['Date']=d
     data['Last_Refresh_Date']=datetime.now()
-    if file_index==0:
-      if os.path.exists(file_path):
-        try:
-          df = pd.read_csv(file_path)
-        except:
-          data.to_csv(file_path, index=False)
-          df = pd.DataFrame(data)
-        file_index=file_index+1
-    if not df.empty:
-      header_value = not pd.Series(file_path).empty
-      # Write the DataFrame to the CSV file
-      pd.DataFrame(data).to_csv(file_path, mode='a', header=False, index=False)
-      print(f"Data Loaded: {d}")
+    data_list = data.to_dict(orient='records')
+    table.insert_many(data_list)
+    print(f"Data Loaded: {d}")
     try:
       go_back_button()
     except:
       refresh()
+
