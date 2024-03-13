@@ -186,7 +186,7 @@ commodity = 'Onion'
 table=connect_db()
 m_date = table.find_one(sort=[('Date', -1)])
 
-if m_date['Date'] is not None:
+if m_date is not None:
     min_date = m_date['Date']
 else:
     min_date = datetime(2010, 1, 1)
