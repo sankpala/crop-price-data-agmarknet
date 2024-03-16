@@ -175,55 +175,54 @@ def run_main(group_commodity,commodity,month,year,day):
       except:
         refresh()
         refresh_f=1
-def main_query():
-  import os
-  import pandas as pd
-  from datetime import datetime
 
-  group_commodity = 'Vegetables'
-  commodity = 'Onion'
 
-  table=connect_db()
-  m_date = table.find_one(sort=[('Date', -1)])
 
-  if m_date is not None:
-      min_date = m_date['Date']
-  else:
-      min_date = datetime(2010, 1, 1)
+import os
+import pandas as pd
+from datetime import datetime
 
-  # For MongoDB
-  date_seq=date_sequence(min_date,datetime.today())
+group_commodity = 'Vegetables'
+commodity = 'Onion'
+
+table=connect_db()
+m_date = table.find_one(sort=[('Date', -1)])
+
+if m_date is not None:
+    min_date = m_date['Date']
+else:
+    min_date = datetime(2010, 1, 1)
+
+# For MongoDB
+date_seq=date_sequence(min_date,datetime.today())
+refresh_f=1
+refresh_n=0
+date_index=0
+file_index=0
+for d in date_seq:
   refresh_f=1
   refresh_n=0
-  date_index=0
-  file_index=0
-  for d in date_seq:
-    refresh_f=1
-    refresh_n=0
-    # Extract individual components
-    month = d.strftime("%B")
-    year = d.strftime("%Y")
-    day = d.strftime("%d")
-    while refresh_f==1 and refresh_n<=3:
-      run_main(group_commodity,commodity,month,year,day)
-      refresh_n=refresh_n+1
-    if refresh_n<=3:
-      date_index=date_index+1
-      res=scrape_table()
-      try:
-        data=output_data(res)
-      except:
-        print(f"No data found for {d}")
+  # Extract individual components
+  month = d.strftime("%B")
+  year = d.strftime("%Y")
+  day = d.strftime("%d")
+  while refresh_f==1 and refresh_n<=3:
+    run_main(group_commodity,commodity,month,year,day)
+    refresh_n=refresh_n+1
+  if refresh_n<=3:
+    date_index=date_index+1
+    res=scrape_table()
+    try:
+      data=output_data(res)
       data['Date']=d
       data['Last_Refresh_Date']=datetime.now()
-      data_list = data.to_dict(orient='records')
-      table.insert_many(data_list)
-      print(f"Data Loaded: {d}")
-      try:
-        go_back_button()
-      except:
-        refresh()
-try:
-  main_query()
-except:
-  time.sleep(900)
+    except:
+      print(f"No data found for {d}")
+      data = pd.DataFrame({'Date':[d]})
+    data_list = data.to_dict(orient='records')
+    table.insert_many(data_list)
+    print(f"Data Loaded: {d}")
+    try:
+      go_back_button()
+    except:
+      refresh()
