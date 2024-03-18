@@ -21,9 +21,9 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import os
 
-mongo_db = os.getenv("mongodb_db")
-mongo_table = os.getenv("mongodb_table")
-mongo_url = os.getenv("mongodb_url")
+mongo_db = os.getenv("mongo_db")
+mongo_table = os.getenv("mongo_table")
+mongo_url = os.getenv("mongo_url")
 start_day = os.getenv("start_day")
 start_month = os.getenv("start_month")
 start_year = os.getenv("start_year")
