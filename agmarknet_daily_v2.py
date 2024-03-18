@@ -28,9 +28,7 @@ start_day = os.getenv("start_day")
 start_month = os.getenv("start_month")
 start_year = os.getenv("start_year")
 
-print(type(mongo_db)," ",type(start_year))
 
-"""
 options = webdriver.ChromeOptions()
 options.add_argument('--headless')
 options.add_argument('--no-sandbox')
@@ -131,11 +129,11 @@ def refresh():
   browser.get("https://agmarknet.gov.in/PriceAndArrivals/SpecificCommodityWeeklyReport.aspx")
 
 def connect_db():
-  uri = "mongodb+srv://onion2:onion2@cluster0.yfe0ahi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+  uri = mongo_url
   # Create a new client and connect to the server
   client = MongoClient(uri, server_api=ServerApi('1'))
   client.admin.command('ping')
-  table=client.agmarknet.onion_18122020
+  table=client.mongo_db.mongo_table
   return table
 
 def output_data(res):
@@ -198,7 +196,7 @@ m_date = table.find_one(sort=[('Date', -1)])
 if m_date is not None:
     min_date = m_date['Date']
 else:
-    min_date = datetime(2020, 12, 19)
+    min_date = datetime(int(start_year), int(start_month), int(start_day))
 
 # For MongoDB
 date_seq=date_sequence(min_date,datetime.today())
@@ -233,4 +231,4 @@ for d in date_seq:
       go_back_button()
     except:
       refresh()
-"""
+
