@@ -21,12 +21,12 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import os
 
-mongodb_db=os.environ["mongodb_db"]
-mongodb_table=os.environ["mongodb_table"]
-mongodb_url=os.environ["mongodb_url"]
-start_day=int(os.environ["start_day"])
-start_month=int(os.environ["start_month"])
-start_year=int(os.environ["start_year"])
+mongodb_db=os.getenv("mongodb_db")
+mongodb_table=os.getenv("mongodb_table")
+mongodb_url=os.getenv("mongodb_url")
+start_day=int(os.getenv("start_day"))
+start_month=int(os.getenv("start_month"))
+start_year=int(os.getenv("start_year"))
 
 print(mongodb_db," ",mongodb_table," ",mongodb_url," ",start_day," ",start_month," ",start_year)
 
