@@ -19,7 +19,18 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import StaleElementReferenceException
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+import os
 
+mongodb_db=os.environ["mongodb_db"]
+mongodb_table=os.environ["mongodb_table"]
+mongodb_url=os.environ["mongodb_url"]
+start_day=int(os.environ["start_day"])
+start_month=int(os.environ["start_month"])
+start_year=int(os.environ["start_year"])
+
+print(mongodb_db," ",mongodb_table," ",mongodb_url," ",start_day," ",start_month," ",start_year)
+
+"""
 options = webdriver.ChromeOptions()
 options.add_argument('--headless')
 options.add_argument('--no-sandbox')
@@ -120,11 +131,11 @@ def refresh():
   browser.get("https://agmarknet.gov.in/PriceAndArrivals/SpecificCommodityWeeklyReport.aspx")
 
 def connect_db():
-  uri = "mongodb+srv://adeshsan:Shubham1998@cluster0.ed3cqap.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+  uri = "mongodb+srv://onion2:onion2@cluster0.yfe0ahi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
   # Create a new client and connect to the server
   client = MongoClient(uri, server_api=ServerApi('1'))
   client.admin.command('ping')
-  table=client.agmarknet.onion
+  table=client.agmarknet.onion_18122020
   return table
 
 def output_data(res):
@@ -178,10 +189,6 @@ def run_main(group_commodity,commodity,month,year,day):
 
 
 
-import os
-import pandas as pd
-from datetime import datetime
-
 group_commodity = 'Vegetables'
 commodity = 'Onion'
 
@@ -191,7 +198,7 @@ m_date = table.find_one(sort=[('Date', -1)])
 if m_date is not None:
     min_date = m_date['Date']
 else:
-    min_date = datetime(2010, 1, 1)
+    min_date = datetime(2020, 12, 19)
 
 # For MongoDB
 date_seq=date_sequence(min_date,datetime.today())
@@ -226,3 +233,4 @@ for d in date_seq:
       go_back_button()
     except:
       refresh()
+"""
