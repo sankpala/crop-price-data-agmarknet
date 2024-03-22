@@ -10,9 +10,9 @@ env:
   mongo_db: ${{ secrets.MONGODB_DB }}
   mongo_table: ${{ secrets.MONGODB_TABLE }}
   mongo_url: ${{ secrets.MONGODB_URL }}
-  start_year: ${{ vars.START_YEAR }}
-  start_month: ${{ vars.START_MONTH }}
-  start_day: ${{ vars.START_DAY }}
+  start_year: ${{ secrets.START_YEAR }}
+  start_month: ${{ secrets.START_MONTH }}
+  start_day: ${{ secrets.START_DAY }}
 
 permissions:
   contents: read
