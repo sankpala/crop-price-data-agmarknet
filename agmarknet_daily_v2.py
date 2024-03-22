@@ -21,12 +21,12 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import os
 
-mongo_db = os.getenv("mongo_db")
-mongo_table = os.getenv("mongo_table")
-mongo_url = os.getenv("mongo_url")
-start_day = os.getenv("start_day")
-start_month = os.getenv("start_month")
-start_year = os.getenv("start_year")
+mongo_db = os.environ.get("mongo_db")
+mongo_table = os.environ.get("mongo_table")
+mongo_url = os.environ.get("mongo_url")
+start_day = os.environ.get("start_day")
+start_month = os.environ.get("start_month")
+start_year = os.environ.get("start_year")
 
 
 options = webdriver.ChromeOptions()
