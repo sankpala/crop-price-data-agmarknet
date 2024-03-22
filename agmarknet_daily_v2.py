@@ -133,7 +133,8 @@ def connect_db():
   # Create a new client and connect to the server
   client = MongoClient(uri, server_api=ServerApi('1'))
   client.admin.command('ping')
-  table=client.mongo_db.mongo_table
+  db = client[mongo_db]
+  table = db[mongo_table]
   return table
 
 def output_data(res):
