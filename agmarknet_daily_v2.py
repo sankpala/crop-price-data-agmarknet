@@ -24,10 +24,11 @@ import os
 mongo_db = os.environ.get("mongo_db")
 mongo_table = os.environ.get("mongo_table")
 mongo_url = os.environ.get("mongo_url")
-start_day = os.environ.get("start_day")
-start_month = os.environ.get("start_month")
-start_year = os.environ.get("start_year")
-
+start_day = 18
+start_month = 12
+start_year = 2020
+group_commodity = 'Vegetables'
+commodity = 'Onion'
 
 options = webdriver.ChromeOptions()
 options.add_argument('--headless')
@@ -137,6 +138,17 @@ def connect_db():
   table = db[mongo_table]
   return table
 
+def delete_duplicate(tb):
+  pipeline = [{"$group": {"_id": "$Date", "maxLastRefreshDate": {"$max": "$Last_Refresh_Date"}}}]
+  # Execute the aggregation pipeline
+  result = tb.aggregate(pipeline)
+  # Delete documents with Last_Refresh_Date not equal to maxLastRefreshDate for each Date
+  for entry in result:
+      date = entry['_id']
+      max_last_refresh_date = entry['maxLastRefreshDate']
+      # Delete documents with Date equal to date and Last_Refresh_Date not equal to max_last_refresh_date
+      delete_result = tb.delete_many({"Date": date, "Last_Refresh_Date": {"$ne": max_last_refresh_date}})
+
 def output_data(res):
   soup = bs4.BeautifulSoup(res, 'html.parser')
   table = soup.find('table', id='cphBody_gridRecords')
@@ -186,11 +198,6 @@ def run_main(group_commodity,commodity,month,year,day):
         refresh()
         refresh_f=1
 
-
-
-group_commodity = 'Vegetables'
-commodity = 'Onion'
-
 table=connect_db()
 m_date = table.find_one(sort=[('Date', -1)])
 
@@ -233,3 +240,4 @@ for d in date_seq:
     except:
       refresh()
 
+delete_duplicate(table)
