@@ -202,7 +202,7 @@ table=connect_db()
 m_date = table.find_one(sort=[('Date', -1)])
 
 if m_date is not None:
-    min_date = m_date['Date']
+    min_date = m_date['Date'] - timedelta(days=5)
 else:
     min_date = datetime(int(start_year), int(start_month), int(start_day))
 
