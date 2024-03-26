@@ -139,7 +139,12 @@ def connect_db():
   return table
 
 def delete_duplicate(tb):
-  pipeline = [{"$group": {"_id": "$Date", "maxLastRefreshDate": {"$max": "$Last_Refresh_Date"}}}]
+  today = datetime.now()
+  thirty_days_ago = today - timedelta(days=30)
+  pipeline = [
+      {"$match": {"Date": {"$gte": thirty_days_ago}}},
+      {"$group": {"_id": "$Date", "maxLastRefreshDate": {"$max": "$Last_Refresh_Date"}}}
+    ]
   # Execute the aggregation pipeline
   result = tb.aggregate(pipeline)
   # Delete documents with Last_Refresh_Date not equal to maxLastRefreshDate for each Date
